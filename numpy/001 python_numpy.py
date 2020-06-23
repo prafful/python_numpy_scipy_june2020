@@ -122,3 +122,193 @@ print(fourth)
 [[  8   7   6   5   4  10  88   1]
  [  1   2   3   4  44 100  88   8]]
 """
+
+print("3D arrays")
+
+threed = np.array([[[1,2],[3,4]],[[5,6],[7,8]]])
+print(threed)
+"""
+[[[1 2]
+  [3 4]]
+
+ [[5 6]
+  [7 8]]]
+"""
+print("shape of threed:")
+print(threed.shape)
+"""
+
+  [4]
+"""
+print(threed[0, 1 , 1])
+"""
+
+  [3, 4]
+"""
+print(threed[0, 1 , :])
+"""
+ [1, 2]
+  [3, 4]
+"""
+print(threed[0, : , :])
+"""
+[[5 6]
+ [7 8]]
+"""
+print(threed[1, : , :])
+"""
+[[3 4]
+  [7 8]]
+
+"""
+print(threed[:,1,:])
+"""
+[[1 2]
+[5 6]]
+"""
+print(threed[:,0, :])
+print("Replace elements in threed: ")
+"""
+[[[1 2]
+  [3 4]]
+
+ [[5 6]
+  [7 8]]]
+"""
+#replacing the 1st row (index pos is 0) of each 2d matrix in 3d matrix
+threed[:,0,:] = [[10,11],[12,13]]
+print(threed)
+#replacing the 2nd row (index pos is 1) of each 2d matrix in 3d matrix
+threed[:,1,:] = [[21,22],[23,24]]
+print(threed)
+#will throw error
+#ValueError: setting an array element with a sequence.
+#threed[:,1,:] = [[21],[23,24]]
+#threed[:,1,:] = [[21, 22, 30],[23,24]]
+
+print("Initialize arrays with numpy using diff values!!!!")
+print("All zeros matrix:")
+allzeros = np.zeros(8)
+print(allzeros)
+allzeros2d =  np.zeros((4, 4))
+print(allzeros2d)
+allzeros2by3 = np.zeros((2, 3), dtype="int32")
+print(allzeros2by3)
+
+print("All ones matrix:")
+
+allones2by3 = np.ones((2, 4), dtype="int32")
+print(allones2by3)
+
+allones4by3by2 = np.ones((4, 3, 2), dtype="int32")
+print(allones4by3by2)
+
+print("Any number matrix: ")
+any4by4with88 = np.full((4,4), 88)
+print(any4by4with88)
+
+print("Create a matrix with shape same as any other matrix but fill with any default number:")
+defaultfourth = np.full(fourth.shape, 4)
+print(defaultfourth)
+print("Alternate way:")
+defaultfourthalternate = np.full_like(fourth, 8)
+print(defaultfourthalternate)
+
+print("Create matrix with random decimal values: ")
+random4by2 = np.random.rand(4,2)
+print(random4by2)
+
+print("Create matrix with random integer values: ")
+random4by2int = np.random.randint(20, size=(4,2))
+print(random4by2int)
+
+print("Create matrix with random integer values: ")
+random4by2by2int = np.random.randint(5, 10, size=(4,2,2))
+print(random4by2by2int)
+
+print("Create matrix with random integer values: ")
+random4by2by2int = np.random.randint(5, 50, size=(4,2,2))
+print(random4by2by2int)
+
+print("Create identity matrix of 2 by 2: ")
+identitymatrix = np.identity(2)
+print(identitymatrix)
+
+identitymatrix = np.identity(2, dtype="int32")
+print(identitymatrix)
+
+
+print("Create identity matrix of 8 by 8: ")
+identitymatrix = np.identity(8)
+print(identitymatrix)
+
+print("Use 1D matrix to create new n-dimensional matrix")
+matrix1d = np.array([[1,2,3]])
+ndim = np.repeat(matrix1d, 3)
+print(ndim)
+print("Create repeatation for each element in matrix1d as a new row")
+"""
+ [[1 2 3]
+ [1 2 3]
+ [1 2 3]]
+"""
+ndim = np.repeat(matrix1d, 3, axis=0)
+print(ndim)
+"""
+[
+    [1 1 1 1 1]
+    [1 0 0 0 1]
+    [1 0 8 0 1]
+    [1 0 0 0 1]
+    [1 1 1 1 1]
+]
+"""
+checkone = np.ones((5,5))
+print(checkone)
+checkzero = np.zeros((3,3))
+print(checkzero)
+checkzero[1,1]=8
+print(checkzero)
+#rowindex:length, columnindex:length
+checkone[1:4,1:4] = checkzero
+print(checkone)
+
+print("Matrix copy!")
+copy1 = np.array([10,20,30])
+copy2 = copy1
+print(copy1)
+print(copy2)
+copy2[0]= 88
+print(copy2)
+print(copy1)
+copy3 = copy1.copy()
+print(copy3)
+copy3[0]=8
+print(copy3)
+print(copy1)
+
+
+print("Matrix maths: ")
+copy = np.array([10,20,30])
+addcopy = copy + 4
+print(addcopy)
+
+minuscopy = copy - 4
+print(minuscopy)
+
+multicopy = copy * 4
+print(multicopy)
+
+divcopy = copy / 4
+print(divcopy)
+
+ndim = np.random.randint(0, 5, size=(3,3))
+print(ndim)
+multindim = ndim * 4
+print(multindim)
+
+copy = np.array([10,20,30])
+dopy = np.array([3,4])
+
+chemy = copy + dopy
+print(chemy)
