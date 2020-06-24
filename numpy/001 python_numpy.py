@@ -308,7 +308,126 @@ multindim = ndim * 4
 print(multindim)
 
 copy = np.array([10,20,30])
-dopy = np.array([3,4])
+dopy = np.array([3,4,5])
 
 chemy = copy + dopy
 print(chemy)
+
+print("3 by 3 array with random int between 0 to 6: ")
+print(ndim)
+print(ndim ** 3)
+
+print("Sin and Cos values:")
+print(np.sin(ndim))
+print(np.cos(ndim))
+
+
+print("numpy for linear algebra!")
+one = np.full((3,2), 5)
+two = np.random.randint(0, 6, size=(2,3))
+print("One")
+print(one)
+print('Two')
+print(two)
+
+multiboth = np.matmul(one, two)
+print(multiboth)
+
+getdet = np.identity(4)
+print(getdet)
+print(np.linalg.det(getdet))
+
+wo = np.random.randint(0, 6, size=(3,3))
+print(wo)
+print(np.linalg.det(wo))
+
+ow = np.linalg.inv(wo)
+print(ow)
+print(np.linalg.det(ow))
+
+print("Multiply wo and ow to get indentity matrix: ")
+print(np.matmul(wo, ow))
+
+print("Statistical functions in numpy: ")
+print("Fourth: ")
+print(fourth)
+print("Mean: ")
+print(np.mean(fourth))
+print(np.mean(fourth, axis=0))
+print(np.mean(fourth, axis=1))
+
+print("Min: ")
+print(np.min(fourth))
+print(np.min(fourth, axis=0))
+print(np.min(fourth, axis=1))
+print("Max: ")
+print(np.max(fourth))
+print(np.max(fourth, axis=0))
+print(np.max(fourth, axis=1))
+
+print("Sum:")
+print(np.sum(fourth))
+
+print(np.sum(fourth, axis=0))
+print(np.sum(fourth, axis=1))
+
+print("Reorganizing the arrays: ")
+print("Fourth: ")
+print(fourth)
+print("Shape:")
+print(fourth.shape)
+new8by2 = fourth.reshape(8,2)
+print("Reshaped to 8 by 2: ")
+print(new8by2)
+print(new8by2.shape)
+new4by4 = fourth.reshape(4,4)
+print("Reshaped to 4 by 4: ")
+print(new4by4)
+print(new4by4.shape)
+new2by2by2by2 = fourth.reshape(2,2,2,2)
+print("Reshaped to 2 by 2 by 2 by 2: ")
+print(new2by2by2by2)
+print(new2by2by2by2.shape)
+
+a1 = np.full(4, fill_value=4)
+print(a1)
+a2 = np.full(4, fill_value=9)
+print(a2)
+print("Vertical Stack: ")
+print(np.vstack([a1, a2]))
+print(np.vstack([a1, a2, a2, a1]))
+print("Horizontal Stack: ")
+print(np.hstack([a1, a2]))
+a3 = np.full((2,3), 8)
+print(a3)
+a4 = np.full((2,4), 2)
+print(a4)
+print(np.hstack([a3, a4]))
+
+
+"""
+[
+  [1  2  3  4  5]
+  [6  7  8  9 10]
+  [11 12 13 14 15]
+  [16 17 18 19 20]
+  [21 22 23 24 25]
+]
+
+"""
+seq = np.arange(1,26)
+print(seq)
+square1to25 = seq.reshape(5,5)
+print(square1to25)
+
+print("Extract 11 12 16 17: ")
+print(square1to25[2:4, 0:2])
+
+print("Extract 2 8 14 20: ")
+print(square1to25[[0,1,2,3], [1, 2, 3, 4 ]])
+
+print("Extract 1 7 13 19 25 : ")
+print(square1to25[[0,1,2,3, 4], [0, 1, 2, 3, 4 ]])
+
+print("Extract 4 5 24 25: ")
+print(square1to25[[0,4], 3:])
