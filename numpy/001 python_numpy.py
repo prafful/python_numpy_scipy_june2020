@@ -342,6 +342,7 @@ print(wo)
 print(np.linalg.det(wo))
 
 ow = np.linalg.inv(wo)
+
 print(ow)
 print(np.linalg.det(ow))
 
@@ -431,3 +432,17 @@ print(square1to25[[0,1,2,3, 4], [0, 1, 2, 3, 4 ]])
 
 print("Extract 4 5 24 25: ")
 print(square1to25[[0,4], 3:])
+
+print("Histogram in numpy: ")
+viewslots = np.arange(1000, 10000, step=1000)
+print(viewslots)
+
+youtubeviews = np.random.randint(1000, 10000, size=(30,))
+print(youtubeviews)
+
+print(np.histogram(youtubeviews, viewslots))
+viewcount, viewrange = np.histogram(youtubeviews, viewslots)
+print("View count: ")
+print(viewcount)
+print("View range:")
+print(viewrange)
