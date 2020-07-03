@@ -122,3 +122,124 @@ df5.location = df5.location.apply(lambda x: 'other' if x in all_locations_with_h
 print(df5.location.unique())
 print(df5.location.unique().size)
 print(df5.head())
+
+
+#detecting outliers and removing them!
+print(df5.head(30))
+
+#get the dataframe where sqft for each room is less than 300
+print(df5[df5.total_sqft/df5.bhk<300].head())
+print(df5[df5.total_sqft/df5.bhk<300].size)
+
+#get the new dataframe where sqft of each room is more than 300
+df6 = df5[~(df5.total_sqft/df5.bhk<300)]
+print(df6.head)
+print(df6.size)
+
+#get more information from price_per_sqft
+print(df6.price_per_sqft.describe())
+
+#define the function to remove extremes in price_per_sqft
+
+def remove_extremes_ppsft(dataframe):
+    df_return = pd.DataFrame()
+    for key, df_temp in dataframe.groupby('location'):
+        mean_temp = np.mean(df_temp.price_per_sqft)
+        std_temp = np. std(df_temp.price_per_sqft)
+        filtered_df = df_temp[(df_temp.price_per_sqft > (mean_temp-std_temp)) & (df_temp.price_per_sqft <= (mean_temp + std_temp))]
+        df_return = pd.concat([df_return, filtered_df], ignore_index=True)
+    return df_return
+        
+
+df7 = remove_extremes_ppsft(df6)
+print(df7.shape)
+print(df7.size)
+
+
+#plot the scatter chart for some area -> Doddathoguru to see distribution of prices
+# for 2 bhk and 3 bhk
+
+'''
+def plot_scatter_for_location(df, location):
+    bhk2 = df[(df.location == location) & (df.bhk == 2)]
+    bhk3 = df[(df.location == location) & (df.bhk == 3)]
+    plt.scatter(bhk2.total_sqft, bhk2.price, color="blue", label="2 BHK", s=50)
+    plt.scatter(bhk3.total_sqft, bhk3.price, color="blue", label="3 BHK", s=50, marker="+")
+    plt.xlabel("Total Sq Ft Area")
+    plt.ylabel("price")
+    plt.title(location)
+    plt.legend()
+    plt.show()
+
+
+
+plot_scatter_for_location(df7, "Electronic City Phase II")
+'''
+
+#get all unique bathrooms
+print(df7.bath.unique())
+
+#plot histogram to get how many bathrooms are in how many homes.
+
+'''
+plt.hist(df7.bath, rwidth=0.4)
+plt.xlabel("Number of bathrooms")
+plt.ylabel("Count")
+plt.show()
+
+'''
+
+print(df7[df7.bath>10])
+
+df8 = df7[df7.bath<df7.bhk+2]
+print(df8.shape)
+#df8.to_csv("df8.csv", index=False)
+print(df8.head(20))
+
+df10 = df8.drop(['size', 'price_per_sqft'], axis='columns')
+print(df10.head())
+
+#use hot encoding for location feature to convert its values to numeric
+temp = pd.get_dummies(df10.location)
+print(temp.head(50))
+print(temp.tail(50))
+#combine temp and df10
+df11 = pd.concat([df10, temp], axis='columns')
+print(df11.shape)
+print(df11.head(20))
+
+df12 = df11.drop('location', axis='columns')
+print(df12.shape)
+print(df12.head(20))
+
+#build a model
+# x -> independent values
+# y-> will depend on x
+x = df12.drop(['price'], axis='columns')
+print(x.head(4))
+y = df12.price
+print(y.head(4))
+
+#split the data to use for training and (testing) success-rate of training
+ 
+from sklearn.model_selection import train_test_split
+
+x_train, x_test, y_train, y_test = train_test_split(x, y , test_size=0.2, random_state=10)
+
+from sklearn.linear_model import LinearRegression
+
+linearregression = LinearRegression()
+p = linearregression.fit(x_train, y_train) #80%
+s = linearregression.score(x_test, y_test)  #20%
+
+print(p)
+print(s)
+
+# use k fold cross validation to get accuracy of linearregression model
+
+from sklearn.model_selection import ShuffleSplit
+from sklearn.model_selection import cross_val_score
+
+crossvalidation = ShuffleSplit(n_splits= 20, test_size=0.2, random_state = 0)
+score = cross_val_score(LinearRegression(), x, y, cv = crossvalidation)
+print(score)
