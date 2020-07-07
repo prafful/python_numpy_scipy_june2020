@@ -240,6 +240,94 @@ print(s)
 from sklearn.model_selection import ShuffleSplit
 from sklearn.model_selection import cross_val_score
 
-crossvalidation = ShuffleSplit(n_splits= 20, test_size=0.2, random_state = 0)
+crossvalidation = ShuffleSplit(n_splits= 4, test_size=0.2, random_state = 0)
 score = cross_val_score(LinearRegression(), x, y, cv = crossvalidation)
 print(score)
+
+#use GridSearchCV to estimate best algorithm
+
+from sklearn.model_selection import GridSearchCV
+from sklearn.linear_model import Lasso
+from sklearn.tree import DecisionTreeRegressor
+
+def find_best_algo_using_gridsearchcv(x, y):
+    #configuration object for the logic
+    configuration = {
+        'linear_regression':{
+            'model':LinearRegression(),
+            'parameters':{
+                'normalize':[True, False]
+            }
+        },
+        'lasso':{
+            'model':Lasso(),
+            'parameters':{
+                'alpha':[1, 2],
+                'selection':['random','cyclic']
+            }
+        },
+        'decision_tree':{
+            'model':DecisionTreeRegressor(),
+            'parameters':{
+                'criterion':['mse', 'friedman_mse'],
+                'splitter':['best', 'random']
+            }
+        }
+    }
+
+    scores = []
+    crossvalidation = ShuffleSplit(n_splits=20, test_size=0.2, random_state=0)
+    #run the loop on configuration dictionary to get score of each algorithm
+    for algo_name, config in configuration.items():
+        gs = GridSearchCV(config['model'], config['parameters'], cv=crossvalidation, return_train_score=False)
+        gs.fit(x, y)
+        scores.append({
+            'model':algo_name,
+            'best_score':gs.best_score_,
+            'best_params':gs.best_params_
+        })
+    return pd.DataFrame(scores)
+
+
+
+#print(find_best_algo_using_gridsearchcv(x,y))
+#best algo turns out to be -> linear regression
+
+print(x.columns)
+print(np.where(x.columns=='1st Block Jayanagar')[0][0])
+
+def predictprice(location, sqft, bath, bhk):
+    locationIndex = np.where(x.columns==location)[0]
+    params = np.zeros(len(x.columns))
+    params[0]=sqft
+    params[1]=bath
+    params[2]=bhk
+    if(locationIndex>=0):
+        params[locationIndex]=1
+    return linearregression.predict([params])[0]
+
+
+print(predictprice('1st Block Jayanagar',1000, 2, 2)    )    
+print(predictprice('1st Block Jayanagar',1000, 3, 3)    )
+print(predictprice('1st Block Jayanagar',1000, 4, 4)    )
+print(predictprice('Vittasandra',1000, 2, 2)    )
+print(predictprice('Yeshwanthpur',1000, 2, 2)    )
+print(predictprice('Whitefield',1000, 2, 2)    )
+print(predictprice('Electronic City',1000, 2, 2)    )
+print(predictprice('Indira Nagar',1000, 2, 2)    )
+print(predictprice('Indira Nagar',1000, 3, 3)    )
+print(predictprice('Indira Nagar',1000, 4, 4)    )
+print(predictprice('Indira Nagar',1000, 2, 3)    )
+
+import pickle
+with open('bengaluru_home_price_model.pickle', 'wb') as f:
+    pickle.dump(linearregression, f)    
+
+
+import json
+columns = {
+    'locations':[column.lower() for column in x.columns]
+}
+
+with open('location.json',"w") as f:
+    f.write(json.dumps(columns))
